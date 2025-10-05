@@ -1,0 +1,26 @@
+{
+    "version": 4,
+    "vendor": {
+        "microsoft": {
+            "configurePresets": [
+                {
+                    "name": "default-config",
+                    "displayName": "Default Linux/macOS Build",
+                    "description": "Configures the project for a Debug build using GCC/G++.",
+                    "cacheVariables": {
+                        "CMAKE_BUILD_TYPE": "Debug",
+                        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+                    },
+                    "generator": "Ninja"
+                }
+            ],
+            "buildPresets": [
+                {
+                    "name": "default-build",
+                    "displayName": "Default Build",
+                    "configurePreset": "default-config"
+                }
+            ]
+        }
+    }
+}
