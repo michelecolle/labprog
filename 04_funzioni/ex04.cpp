@@ -42,5 +42,11 @@ vector<double> vd2(1000000);
 //print(vd2);
 //printR(vd1);
 //printR(vd2);
+    double a = 123;
+    double b = 456;
+    double c = (a = b);
+    cout << (a=b) << '\n';
+    cout << c << '\n';
+
     return 0;
 }
