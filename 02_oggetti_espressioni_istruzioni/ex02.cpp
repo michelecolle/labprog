@@ -12,6 +12,6 @@ std::cout <<a<<" "<<c<< "Ops!\n";
 else
 std::cout << "Wow! Char è molto grande!\n";
 int radice(double x);
-double radice(double x);
+//double radice(double x);
 return 0;
 }

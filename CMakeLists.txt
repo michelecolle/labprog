@@ -18,6 +18,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # Add the second sub-project (e.g., Classes Assignment)
 # This command tells CMake to look inside the '02Classes' directory for another CMakeLists.txt
 add_subdirectory(02_oggetti_espressioni_istruzioni)
+add_subdirectory(04_funzioni)
 
 # NOTE: The output directory setting for individual executables has been removed
 # and will now be handled inside the respective sub-project CMakeLists.txt files

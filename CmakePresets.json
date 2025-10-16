@@ -22,5 +22,19 @@
                 }
             ]
         }
-    }
+    },
+    "configurePresets": [
+        {
+            "name": "mik",
+            "displayName": "GCC 15.1.0 x86_64-apple-darwin22",
+            "description": "Using compilers: C = /usr/local/bin/gcc-15, CXX = /usr/local/bin/g++-15",
+            "binaryDir": "${sourceDir}/out/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}",
+                "CMAKE_C_COMPILER": "/usr/local/bin/gcc-15",
+                "CMAKE_CXX_COMPILER": "/usr/local/bin/g++-15",
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        }
+    ]
 }
