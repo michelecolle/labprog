@@ -39,9 +39,13 @@ output nelle varie fasi:
 ### Risposte alle domande:
 
  a. La variabile automatica occupa solo la sezione `text`perché viene allocata e deallocata automaticamente durante l'esecuzione.
+ 
  b. Si veda la risposta precedente.
+ 
  c. Togliendo l'attributo static alle variabili locali anche queste diventano automatiche e spariscono rispettivamente da data e bss, dove rimangono solo le due variabili globali (e quindi statiche) quella inizializzata in data (4byte ovvero la dimensione di un int32) e l'altra in bss.
- e. lo scope delle variabili globali é tutta l'applicazione mentre per quelle locali solo la funzione main.
+ In text per le variabili inizializzate vi é un aumento di un byte per ogni carattere senza contare gli spazi, mentre non vi é nessun aumento per quelle non inizializzate.
+ 
+ d. lo scope delle variabili globali é tutta l'applicazione mentre per quelle locali solo la funzione main.
 
 #### Nota sull'uso di `size` su macOS
 Al momento sto sviluppando su Mac. Il comando `size` restituisce un output diverso da quello di Linux.  
@@ -73,4 +77,4 @@ Si veda il sorgente Lab01b.cpp
 ## 6. Funzione call_counter()
 
 Per questa funzione se definita senza una classe occorre usare una variabile globale, la cui durata é la vita dell'applicazione ed il cui scope é tutta l'applicazione, questo approccio é rischioso perché espone allo sviluppatore la possibilitá di alterare il contatore.
-In alternativa usando le classi é possibile creare una classe statica con una variabile statica, nello scope della classe, che permetta solamente la chiamata a call_counter(), un esempio é presente nel file lab01b.cpp
+In alternativa usando le classi é possibile creare una classe statica con una variabile statica (la cui durata é comunque la vita dell'applicazione), nello scope della classe, che permetta solamente la chiamata a call_counter(), un esempio é presente nel file lab01b.cpp

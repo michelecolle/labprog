@@ -4,8 +4,8 @@ int e;
 int main()
 {
     int a = 5;
-    int b = 6;
-    int c;
+    static int b = 6;
+    static int c;
     
     return 0;
 }
