@@ -1,12 +1,11 @@
 #include <iostream>
-//int d = 7;
-//int e;
+int d = 7;
+int e;
 int main()
 {
-    //auto a = 5;
-    //static int b = 6;
-    //static int c;
-    //static int c;
+    int a = 5;
+    int b = 6;
+    int c;
     
     return 0;
 }
