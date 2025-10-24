@@ -221,7 +221,7 @@ void f(const Buffer* p){
 ```
 
 
-## Puntatori vs reference
+### Puntatori vs reference
 
 ```cpp
 int x1 = 10;
@@ -278,7 +278,7 @@ r2 = r1; // copia del contenuto
 int *p1 = nullptr;
 ```
 
-## Parametri puntatori e reference
+### Parametri puntatori e reference
 
 ```cpp
 int incr_v(int x) { return x + 1; }
@@ -289,18 +289,17 @@ void incr_r(int& r) { ++r; }
 • Ritornare il valore:  
 – È più chiaro e meno soggetto a errori  
 – Ok per oggetti piccoli  
-– Ok per oggetti grandi se hanno il move  
-constructor (lo vedremo più avanti)
+– Ok per oggetti grandi se hanno il **move constructor** (lo vedremo più avanti)
 
 
 ```cpp
 int x = 7;
-incr_p(&x);
-incr_r(x);
+incr_p(&x);//Esplicito
+incr_r(x);//"Looks innocent" 
 ```
 
-Esplicito  
-"Looks innocent"
+  
+
 
 
 ```cpp
@@ -315,3 +314,37 @@ void incr_p(int* p) {
 • Reference vs puntatore – un criterio:  
 – Se no-object è un valore plausibile: puntatore  
 – Altrimenti: reference / const reference
+
+## capitolo 6.4 Array
+
+### Dichiarazione, inizializzazione e dimensioni
+
+``` cpp
+const int max = 100;//costante!!
+int gai[max]; // array globale, sempre disponibile
+void f(int n)
+{
+    char lac[20]; // array locale: vive fino all'uscita dallo scope
+    int lai[60];
+    double lad[n]; // errore: dimensione non costante (se n non è nota a tempo di compilazione)
+}
+```
+NB: i VLA (variable lenght array) esistono in C++ ma non sono parte dello standard
+
+### Puntatori ad elementi di array
+
+``` cpp
+double ad[10];
+double* p = &ad[5];
+```
+
+### Aritmetica dei puntatori
+
+Sommare o sottrarre un intero n da un puntatore significa spostare il puntatore di n slot a destra o a sinistra
+– Operatori: +, -, +=, -=
+
+### Stringhe
+
+Sono sostanzialmente array di char, con tutte le limitazioni degli array, la libreria std::string offre operazioni ad alto livello sulle stringhe.
+
+NB: la fine di una stringa é tradizionalmente indicata dal carattere 0, (**NON '0'**)!!
