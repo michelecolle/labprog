@@ -21,3 +21,6 @@ void f(int x, int y)
     }
 }
 ```
+**Invariante** nel contesto delle classi é una condizione che determina la validitá dello stato di un oggetto
+**Helper functions** funzioni di solito definite nel namespace della classe (quindi implicitamente statiche) che non fanno parte dell'interfaccia (non member functions). Utili per mantenere l'interfaccia minimale e rendere il debugging piú efficiente.
+cit: se non é possibile definire un invariante probabilmente conviene una struct (dati)
