@@ -58,6 +58,30 @@ cout << ++i << ' ' << i << '\n'; // Ordine di valutazione
 // non definito
 ```
 
+```cpp
+#include <stdio.h>
+
+int main() {
+    int i = 5;
+
+    printf("Initial value: %d\n", i); // Output: 5
+
+    // Post-increment: Uses i first, then increments
+    printf("Post-increment (i++): %d\n", i++);    // Output: 5
+    printf("After post-increment, i = %d\n", i);    // Output: 6
+
+    // Reset i
+    i = 5;
+
+    // Pre-increment: Increments i first, then uses it
+    printf("Pre-increment (++i): %d\n", ++i);    // Output: 6
+    printf("After pre-increment, i = %d\n", i);    // Output: 6
+
+    return 0;
+}
+```
+
+
 i++ : operatore con side effect, nel senso che restituisce un valore ma modifica anche l'operando
 
 operatore >> (assegnamento dallo stream) sensibile al tipo  
@@ -144,11 +168,150 @@ cit: se non è possibile definire un invariante probabilmente conviene una struc
 
 # LEZIONE 6
 
-- capitolo 6.1 overload operatori
-- capitolo 6.2 Puntatori e gestione della memoria
+## capitolo 6.1 overload operatori
+## capitolo 6.2 Puntatori e gestione della memoria
 
 **lvalue** variabile che può essere assegnata, l'operatore * (dereference) posto a sinistra in un assegnamento produce un lvalue:
 
 ```cpp
 *p = 10;
+double* p0 = nullptr;//oppure NULL oppure 0
 ```
+### Dimensioni variabili e puntatori dipendono dall'implementazione
+```cpp
+void sizes(char ch, int i, int* p) {
+ cout << "The size of char is " << sizeof(char) << ' '
+<< sizeof(ch) << '\n';
+cout << "The size of int is " << sizeof(int) << ' '
+<< sizeof(i) << '\n';
+cout << "The size of int* is " << sizeof(int*) << ' '
+<< sizeof(p) << '\n';
+}
+```
+## capitolo 6.3 Puntatori e reference cast
+
+### void* : puntatore generico (puntatore void)
+Si tratta di un puntatore generico che bypassa qualsiasi controllo e puo' essere assegnato a qualsiasi puntatore
+
+```cpp
+int i;
+void* pv1 = &i;
+void f(void* pv) {
+ void* pv2 = pv; // ok
+ double* pd = pv; // no! Conversione tra tipi incompatibili
+ *pv = 7 // no! non posso dereferenziare (che oggetto è?)
+ pv[2] = 7; // no! Stessa ragione
+ int* pi = static_cast<int*> (pv); // ok, conversione esplicita
+}
+
+```
+
+### CAST
+static_cast
+– "A deliberately ugly name for an ugly and
+dangerous operation" (BS)
+
+```cpp
+//per tipi totalmente indipendenti (nde paura vera)
+Register* in = reinterpret_cast<Register*>(0xff);
+void f(const Buffer* p){
+    //per eliminare const
+ Buffer* b = const_cast<Buffer*>(p);
+}
+```
+
+
+## Puntatori vs reference
+
+```cpp
+int x1 = 10;
+int* p1 = &x1;
+p1 = 7; // pericoloso!!
+*p1 = 7; // corretto
+int y1 = 10;
+int& r1 = y1;
+r1 = 7;
+```
+
+• Puntatore  
+– È acquisito con &  
+– Posso spostare il puntatore assegnando un nuovo indirizzo  
+• Reference  
+– Non posso spostarla dopo l'inizializzazione
+
+```cpp
+int x1 = 10;
+int x2 = 20;
+int* p1 = &x1;
+p1 = &x2; // puntatore spostato
+int y1 = 10;
+int y2 = 20;
+int& r1 = y1;
+// non ho modo di spostare la reference su y2
+```
+
+• Puntatore : Per accedere all'oggetto puntato: * oppure []  
+• Reference : Nessun operatore per accedere al dato puntato
+
+`*p1 = 4; r1 = 4;`
+
+• Assegnamento del puntatore: due riferimenti allo stesso oggetto (shallow  
+copy)  
+• Assegnamento della reference: copia  
+dell'oggetto a cui si riferisce (deep copy)
+
+```cpp
+int i, j;
+int *p1 = &i;
+int *p2 = &j;
+p2 = p1; // copia del puntatore
+int i, j;
+int &r1 = i;
+int &r2 = j;
+r2 = r1; // copia del contenuto
+```
+
+• Puntatore : Esiste il null pointer  
+• Reference : Non esiste una reference non valida
+
+```cpp
+int *p1 = nullptr;
+```
+
+## Parametri puntatori e reference
+
+```cpp
+int incr_v(int x) { return x + 1; }
+void incr_p(int* p) { ++*p; }
+void incr_r(int& r) { ++r; }
+```
+
+• Ritornare il valore:  
+– È più chiaro e meno soggetto a errori  
+– Ok per oggetti piccoli  
+– Ok per oggetti grandi se hanno il move  
+constructor (lo vedremo più avanti)
+
+
+```cpp
+int x = 7;
+incr_p(&x);
+incr_r(x);
+```
+
+Esplicito  
+"Looks innocent"
+
+
+```cpp
+int* p = nullptr;
+incr_p(p); // incr_p deve gestire questo caso
+void incr_p(int* p) {
+ if (p == nullptr) error("null pointer argument");
+ ++*p;
+}
+```
+
+• Reference vs puntatore – un criterio:  
+– Se no-object è un valore plausibile: puntatore  
+– Altrimenti: reference / const reference
