@@ -348,3 +348,34 @@ Sommare o sottrarre un intero n da un puntatore significa spostare il puntatore 
 Sono sostanzialmente array di char, con tutte le limitazioni degli array, la libreria std::string offre operazioni ad alto livello sulle stringhe.
 
 NB: la fine di una stringa é tradizionalmente indicata dal carattere 0, (**NON '0'**)!!
+
+
+### Sezione da definire:const
+http://duramecho.com/ComputerInformation/WhyHowCppConst.html
+
+La parola chiave const prima di una variabile la rende una costante, dunque puó essere settata solo nel costruttore di una classe o solo in inizializzazione.
+
+dopo una funzione membro invece significa che quella funzione non modifica l'oggetto chiamante, il compilatore lo impedisce.
+
+``` cpp
+class testconst
+{
+public:
+    void SetDataMember(int value);   
+    void SetDataMemberNOTPOSSIBLE(int value) const;   
+private:
+    int dataMember = 0;
+};
+void testconst::SetDataMember(int value)
+{
+    dataMember = value;
+}
+void testconst::SetDataMemberNOTPOSSIBLE(int value) const
+{
+    dataMember = value; // This line would cause a compilation error
+}
+```
+
+# LEZIONE 7
+## capitolo 7.1 Allocare la memoria
+### Richiamo vector

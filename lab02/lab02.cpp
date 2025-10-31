@@ -12,6 +12,7 @@ int main()
     Rational r2{3, 9}; // should be reduced
     std::cout << "r1: " << r1 << " = " << r1.toDouble() << '\n';
     std::cout << "r2 (3/9 reduced): " << r2 << " = " << r2.toDouble() << '\n';
+    
 
     // Assignment operator
     Rational r_assign;
