@@ -13,4 +13,7 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
-add_executable(lab03 lab03.cpp ${sources} ${headers})
+add_executable(lab03_1 lab03_1.cpp ${sources} ${headers})
+add_executable(lab03_2 lab03_2.cpp ${sources} ${headers})
+add_executable(lab03_3 lab03_3.cpp ${sources} ${headers})
+add_executable(lab03_4 lab03_4.cpp ${sources} ${headers})
