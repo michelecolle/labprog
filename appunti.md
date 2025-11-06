@@ -379,3 +379,183 @@ void testconst::SetDataMemberNOTPOSSIBLE(int value) const
 # LEZIONE 7
 ## capitolo 7.1 Allocare la memoria
 ### Richiamo vector
+
+# LEZIONW 8
+## Capitolo 8.1 Progettare un'interfaccia
+### funzioni const
+``` cpp
+class Date {
+public:
+ // ...
+ int& day() const;
+ int& year();
+ // ...
+private:
+ int y;
+ int m;
+ int d;
+};
+//questo ritorna una referenza che permette dall'esterno di modificare l'oggetto date
+int& Date::year() {
+    return y;
+}
+//questo da errore perché vado a modificare l'oggetto
+int& Date::day()  const{
+    return d;
+}
+```
+### helper function
+vedi appunti precedenti o codice
+
+## Capitolo 8.2 Progettare un interfaccia
+### Principi
+Alcuni principi generali
+- L'interfaccia deve essere completa
+- L'interfaccia deve essere minimale
+- Devono essere forniti i costruttori
+- La copia deve essere supportata o proibita
+- Usare tipi adeguati per controllare gli argomenti
+- Identificare le funzioni membro costanti
+- Liberare tutte le risorse nel distruttore
+
+### Costuttori
+#### Costruttore default:
+``` cpp
+Date d0; // errore: nessuna inizializzazione
+Date d1 {}; // errore: inizializzatore vuoto
+Date d2 {1998}; // errore: argomenti insufficienti
+Date d3 {1, 2, 3, 4}; // errore: troppi argomenti
+Date d4 {1, "jan", 2}; // err: tipi sbagliati
+Date d5 {1, Month::jan, 2}; // ok!
+Date d6 {d5}; // ok: costruttore di copia
+``` 
+#### note ionteressanti sulle inizializzazioni da chatgpt
+
+| Context                                          | Example                         | Meaning                                  |
+| ------------------------------------------------ | ------------------------------- | ---------------------------------------- |
+| 1️⃣ Variable declaration                         | `int a(10);`                    | **Direct initialization**                |
+| 2️⃣ Function call                                | `foo(10);`                      | **Call a function**                      |
+| 3️⃣ Member initializer list                      | `MyClass(int x) : member(x) {}` | **Initialize members before body**       |
+| 4️⃣ Constructor forwarding / object construction | `MyType obj(10);`               | **Call a constructor to make an object** |
+
+
+1️⃣ Variable declaration (direct initialization)
+
+You can initialize variables using parentheses instead of =:
+``` cpp
+int a(10);           // same as int a = 10;
+double b(3.14);      // initializes with 3.14
+std::string s("hi"); // constructs string with "hi"
+```
+
+This is called direct initialization, as opposed to copy initialization (int a = 10;).
+
+🟢 Works only at the point of declaration (you can’t do a(10); afterward).
+
+2️⃣ Function calls
+
+Same syntax — totally different meaning:
+``` cpp
+
+foo(10); // Calls function foo with argument 10
+```
+
+So the compiler must decide:
+
+“Is this a function call, or a variable declaration?”
+
+This ambiguity leads to one of C++’s most famous weirdnesses 👇
+
+⚠️ “The Most Vexing Parse”
+``` cpp
+MyClass obj(MyOtherClass());
+```
+
+You might think this creates an object of type MyClass and passes a temporary MyOtherClass() as an argument.
+
+But actually... the compiler reads it as a function declaration:
+
+“Declare a function named obj returning a MyClass, taking a function pointer that returns MyOtherClass.”
+
+😵 That’s why this is called the most vexing parse.
+
+To fix it in modern C++, we use brace initialization:
+```cpp
+MyClass obj{MyOtherClass{}}; // ✅ no ambiguity
+```
+
+#### costruttori di default
+```cpp
+class Date {
+public:
+ // ...
+ Date(int y = 2001, Month m = Month::jan, int d = 1);
+ // ...
+private:
+ int y;
+ Month m;
+ int d;
+};
+```
+in questo modo posso chiamare il costruttore con quanti parametri voglio
+## Capitolo 8.3 Costruttori e inizializzazione
+#### Initializer list
+per poter inizializzare un vettore con una lista esiste giá un sistema standardizzato:
+``` cpp
+vector v1 = { 1.2, 7.89, 12.34 }; // più compatto!
+class vector {
+// ...
+ vector(initializer_list<double> lst)
+ : sz{lst.size()}, elem{new double[sz]}
+ {
+ copy(lst.begin(), lst.end(), elem);
+ }
+// ...
+};class vector {
+// ...
+ vector(initializer_list<double> lst)
+ : sz{lst.size()}, elem{new double[sz]}
+ {
+ copy(lst.begin(), lst.end(), elem);
+ }
+// ...
+};
+```
+Note su `initializer_list`:
+- È passato per copia!
+- `initializer_list` è usato in questo modo, come
+richiesto dal linguaggio
+- `initializer_list` è un handle a elementi allocati
+"altrove"
+
+## Capitolo 8.4 Copia
+### Copia membro a membro (default)
+``` cpp
+void f(int n)
+{
+ vector v(3);
+ v.set(2, 2.2);
+ vector v2 = v; // cosa succede qui?
+ // ...
+}
+```
+di default vengono copiate le referenze del vettore `v` nel vettore `v2` ma i dati puntati rimangono quelli, anche detto **Memberwise clone** o **Shallow copy**
+
+```cpp
+class vector {
+ int sz;
+ double* elem;
+public:
+ vector(const vector&);
+ // ...
+};
+```
+Costruttore di copia per gestire il comportamento di una copia
+``` cpp
+vector::vector(const vector& arg)
+ : sz{arg.sz}, elem{new double[arg.sz]}
+{
+ copy(arg.elem, arg.elem+sz, elem);
+}
+```
+cosí ho la **Deep Copy**    
