@@ -1,40 +1,33 @@
 {
-    "version": 4,
-    "vendor": {
-        "microsoft": {
-            "configurePresets": [
-                {
-                    "name": "default-config",
-                    "displayName": "Default Linux/macOS Build",
-                    "description": "Configures the project for a Debug build using GCC/G++.",
-                    "cacheVariables": {
-                        "CMAKE_BUILD_TYPE": "Debug",
-                        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
-                    },
-                    "generator": "Ninja"
-                }
-            ],
-            "buildPresets": [
-                {
-                    "name": "default-build",
-                    "displayName": "Default Build",
-                    "configurePreset": "default-config"
-                }
-            ]
-        }
-    },
-    "configurePresets": [
-        {
-            "name": "mik",
-            "displayName": "GCC 15.1.0 x86_64-apple-darwin22",
-            "description": "Using compilers: C = /usr/local/bin/gcc-15, CXX = /usr/local/bin/g++-15",
-            "binaryDir": "${sourceDir}/out/build/${presetName}",
-            "cacheVariables": {
-                "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}",
-                "CMAKE_C_COMPILER": "/usr/local/bin/gcc-15",
-                "CMAKE_CXX_COMPILER": "/usr/local/bin/g++-15",
-                "CMAKE_BUILD_TYPE": "Debug"
-            }
-        }
-    ]
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "debug",
+      "generator": "Unix Makefiles",
+      "binaryDir": "build",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_CXX_FLAGS_DEBUG": "-fsanitize=address -g -fno-omit-frame-pointer"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "build",
+      "configurePreset": "debug"
+    }
+  ],
+  "testPresets": [],
+  "packagePresets": [],
+  "workflowPresets": [],
+  "launchPresets": [
+    {
+      "name": "Run with ASan",
+      "configurePreset": "debug",
+      "target": "memoryleak",
+      "environment": {
+        "ASAN_OPTIONS": "detect_leaks=1:leak_check_at_exit=1"
+      }
+    }
+  ]
 }
