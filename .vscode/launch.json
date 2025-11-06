@@ -2,19 +2,22 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "CMake Debug",
+      "name": "🐞 Debug (GDB)",
       "type": "cppdbg",
       "request": "launch",
       "program": "${command:cmake.launchTargetPath}",
-      "args": [],
-      "stopAtEntry": false,
-      "cwd": "${workspaceFolder}",
-      "environment": [],
-      "externalConsole": false,
+      "cwd": "${command:cmake.launchTargetDirectory}",
       "MIMode": "gdb",
-      "setupCommands": [
-        { "description": "Enable pretty-printing for gdb", "text": "-enable-pretty-printing", "ignoreFailures": true }
-      ]
+      "miDebuggerPath": "/usr/bin/gdb",
+      "preLaunchTask": "CMake: build"
+    },
+    {
+      "name": "⚡ Release (no debugger)",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${command:cmake.launchTargetPath}",
+      "cwd": "${command:cmake.launchTargetDirectory}",
+      "preLaunchTask": "CMake: build",
     }
   ]
 }

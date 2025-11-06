@@ -558,4 +558,104 @@ vector::vector(const vector& arg)
  copy(arg.elem, arg.elem+sz, elem);
 }
 ```
-cosí ho la **Deep Copy**    
+cosí ho la **Deep Copy** PROBLEMA: memory leaks! perdo il riferimento ai dati puntati dall'array prima della copia, questi dati vanno eliminati!
+
+``` cpp
+vector& vector::operator=(const vector& a)
+{
+ double* p = new double[a.sz]; // alloca nuovo spazio
+ copy(a.elem, a.elem+a.sz, p); // copia gli elementi
+ delete[] elem;
+ elem = p;
+ sz = a.sz;
+ return *this; // rit. self-reference
+}
+```
+
+• Tipi che implementano una shallow copy
+hanno una pointer semantics (o reference
+semantics)
+• Tipi che implementano una deep copy hanno
+una value semantics
+
+## Capitolo 8.5 Spostamento
+
+Con il deep copy implementato sopra ho un problema:
+``` cpp
+
+vector fill(istream& is)
+{
+ vector res;
+ for (double x; is >> x; ) res.push_back(x);
+ return res;
+}
+void use()
+{
+ vector vec = fill(cin);
+ // uso di vec
+}
+```
+In questo caso sto inizializzando vec ma comunque creo una copia del vector restituito da fill.
+
+``` cpp
+class vector {
+ int sz;
+ double* elem;
+public:
+ vector(vector&& a); // move constructor
+ vector& operator=(vector&&); // move assignment
+ // ...
+};
+```
+• La notazione && è chiamata rvalue reference
+• Gli argomenti non sono const (non possono esserlo!) 
+
+``` cpp
+ector::vector(vector&& a)
+ : sz{a.sz}, elem{a.elem}
+{
+ a.sz = 0; // annulla a
+ a.elem = nullptr;
+}
+vector& vector::operator=(vector&& a)
+{
+ delete[] elem;
+ elem = a.elem;
+ sz = a.sz;
+ a.elem = nullptr;
+ a.sz = 0;
+ return *this;
+}
+```
+**Il compilatore sciegle quale costruttore utilizzare in base al contesto**
+
+poi nominano anche la copy elision come sistema per evitare il move constructor, ma lasciano un generico "verbosa" e "soggetta a errori"
+``` cpp
+vector* fill2(istream& is)
+{
+ vector* res = new vector;
+ for (double x; is >> x; ) res->push_back(x);
+ return res;
+}
+void use2()
+{
+ vector* vec = fill2(cin);
+ // ... usa vec ...
+ delete vec;
+}
+```
+in pratica uso direttamente un puntatore, lo riempio con i dati e lo passo fuori, dalle slide pare che sia una pratica sconsigliata.
+
+### Nota personale: operatore ->
+Serve per accedere a funzioni e dati membro direttamente da un puntatore, senza dereferenziarlo:
+https://stackoverflow.com/questions/1238613/what-is-the-difference-between-the-dot-operator-and-operator
+
+`foo->bar()` is the same as `(*foo).bar()`.
+
+The parenthesizes above are necessary because of the binding strength of the `*` and `.` operators.
+
+`*foo.bar()` wouldn't work because Dot `.` operator is evaluated first (see operator precedence)
+
+The Dot `.` operator can't be overloaded, arrow `->` operator can be overloaded.
+
+The Dot `.` operator can't be applied to pointers.
