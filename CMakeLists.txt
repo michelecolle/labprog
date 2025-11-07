@@ -5,8 +5,13 @@ cmake_minimum_required(VERSION 3.10)
 project(MultiExecutableProject LANGUAGES CXX)
 
 # Specify the C++ standard to use (e.g., C++17)
+
+
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+add_compile_options(-fno-elide-constructors)
 
 # We are no longer using the 'src' folder directly. Instead, we use subdirectories
 # for each independent application/assignment.
@@ -20,6 +25,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 add_subdirectory(02_oggetti_espressioni_istruzioni)
 add_subdirectory(04_funzioni)
 add_subdirectory(08_interfacce_const_ecc)
+add_subdirectory(lab04)
 
 # NOTE: The output directory setting for individual executables has been removed
 # and will now be handled inside the respective sub-project CMakeLists.txt files
