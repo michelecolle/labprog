@@ -26,6 +26,7 @@ add_subdirectory(02_oggetti_espressioni_istruzioni)
 add_subdirectory(04_funzioni)
 add_subdirectory(08_interfacce_const_ecc)
 add_subdirectory(lab04)
+add_subdirectory(lab05)
 
 # NOTE: The output directory setting for individual executables has been removed
 # and will now be handled inside the respective sub-project CMakeLists.txt files
