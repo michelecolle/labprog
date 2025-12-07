@@ -22,11 +22,17 @@ add_compile_options(-fno-elide-constructors)
 
 # Add the second sub-project (e.g., Classes Assignment)
 # This command tells CMake to look inside the '02Classes' directory for another CMakeLists.txt
-add_subdirectory(02_oggetti_espressioni_istruzioni)
+add_subdirectory(02_oggetti_espressioni_istruzioni) 
 add_subdirectory(04_funzioni)
 add_subdirectory(08_interfacce_const_ecc)
-add_subdirectory(lab04)
-add_subdirectory(lab05)
+
+# Add all subdirectories starting with 'lab'
+file(GLOB LAB_SUBDIRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "lab*")
+foreach(LAB_DIR ${LAB_SUBDIRS})
+    if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${LAB_DIR})
+        add_subdirectory(${LAB_DIR})
+    endif()
+endforeach()
 
 # NOTE: The output directory setting for individual executables has been removed
 # and will now be handled inside the respective sub-project CMakeLists.txt files
