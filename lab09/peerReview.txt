@@ -1,0 +1,28 @@
+Gruppo revisionato: Gruppo Casuale 3
+
+    1)    compila correttamente, esegue correttamente.
+
+    2)    Testate le funzionalità principali, tutte funzionanti, compreso il buffer ciclico. 
+          Il metodo push_back impedisce correttamente di inserire un nullptr.  
+
+    3)    problemi di design:
+                funzione pop_front ritorna un oggetto di tipo Measure (CONTRARIAMENTE A QUANTO RICHIESTO NELLA CONSEGNA)
+                manca myvector.hpp tutto in myvector.h
+                uso di funzione friend in ItertialDriver 
+                utilizzo non corretto dell’allocazione dinamica della memoria: gestita male la delete nell` operator = in MyVector perche` fa la delete prima della modifica
+
+          segmentation fault saltuari: no
+          memory leak: no 
+          accesso agli array in posizioni non consentite: gestito con le exception
+          presenza di magic number: no
+          funzioni eccessivamente lunghe: no 
+
+        stile migliorabile: 
+              variabile count o tail non necessaria in InertialDriver 
+              MyVector::reallocate non viene usato std::copy
+              stampa a schermo migliorabile per esempio con una tabella al posto di scrivere i nomi di tutte le variabili per ogni riga
+
+    
+    
+    
+    
